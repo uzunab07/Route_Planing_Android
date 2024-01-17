@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +36,17 @@ import okhttp3.ResponseBody;
 import okhttp3.internal.http.RealResponseBody;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    public class LocationSet {
+        ArrayList<Location> path;
+
+        public LocationSet(ArrayList<Location> locations) {
+            this.path = locations;
+        }
+
+
+    }
+
 
     private String url = "https://www.theappsdr.com/map/route";
     private final OkHttpClient client = new OkHttpClient();
@@ -78,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 minLn = Double.parseDouble(location.longitude);
             }
         }
-
-        //Log.d("demo", "onMapReady Upper LEft: Lat:"+maxLa+"Long:"+maxLn);
-        //Log.d("demo", "onMapReady Bottom Right: Lat:"+minLa+"Long:"+minLn);
 
         LatLng upperRight = new LatLng(maxLa, minLn);
         LatLng bottomLeft = new LatLng(minLa, maxLn);
@@ -130,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LocationSet locationSet = gson.fromJson(responseBody.charStream(), LocationSet.class);
 
                     locations = locationSet.path;
-
-                    Log.d("demo", "onResponse: "+locations.get(0));
 
                     runOnUiThread(new Runnable() {
                         @Override
